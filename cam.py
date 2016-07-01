@@ -6,7 +6,6 @@ pixelarray = (2048.0,1024.0)
 fov = 64.0
  
 pixprodeg = map(lambda x: x/fov, pixelarray)
- 
 print (pixprodeg)
  
 minimalViewDistance = 230.0
@@ -18,9 +17,11 @@ f= map(lambda x: calcf(x,fov), pixelarray)
 print (f)
 
 pixpromm = map(lambda x: minimalViewDistance /  x, f)
+#ppms = "Pixel Pro mm width:\t{:06.5f}\nPixel Pro mm height:\t{:06.5f}".format(pixpromm[0],pixpromm[1])
+#print (ppms)
 print (pixpromm)
 
-viewsize = map(lambda x,y: (minimalViewDistance * x / y), pixelarray, f)
+viewsize = map(lambda x,y: minimalViewDistance * x / y, pixelarray, f)
 print (viewsize)
 
 '''
