@@ -1,22 +1,47 @@
 #!/usr/bin/python
- 
+
+import math as m
+    
 pixelarray = (2048.0,1024.0)
 fov = 64.0
  
-pixprodeg = pixelarray[0]/fov
+pixprodeg = map(lambda x: x/fov, pixelarray)
  
 print (pixprodeg)
  
-import math as m
- 
 minimalViewDistance = 230.0
 
-f = (pixelarray/2) / tan(deg2rad(fov/2));
+def calcf(pixelsize,fov):
+    return ((pixelsize/2) / m.tan(m.radians(fov/2)))
 
-pixpromm = minimalViewDistance /  f;
+f= map(lambda x: calcf(x,fov), pixelarray)
+print (f)
 
-viewwidth = minimalViewDistance * pixelarray /  f;
+pixpromm = map(lambda x: minimalViewDistance /  x, f)
+print (pixpromm)
 
-#Pixpromm = viewwidth / pixelarray
-#= minimalViewDistance /  f
-#= minimalViewDistance  * tan(deg2rad(fov/2)) / (pixelarray/2)
+viewsize = map(lambda x,y: (minimalViewDistance * x / y), pixelarray, f)
+print (viewsize)
+
+'''
+def main(argv):
+   inputfile = ''
+   outputfile = ''
+   try:
+      opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
+   except getopt.GetoptError:
+      print 'test.py -i <inputfile> -o <outputfile>'
+      sys.exit(2)
+   for opt, arg in opts:
+      if opt == '-h':
+         print 'test.py -i <inputfile> -o <outputfile>'
+         sys.exit()
+      elif opt in ("-i", "--ifile"):
+         inputfile = arg
+      elif opt in ("-o", "--ofile"):
+         outputfile = arg
+   print 'Input file is "', inputfile
+   print 'Output file is "', outputfile
+
+if __name__ == "__main__":
+   main(sys.argv[1:])'''
