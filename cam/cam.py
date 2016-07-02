@@ -13,11 +13,13 @@ class image(object):
         return (self.width, self.height)
         
 class cam(object):
-    def __init__(self, image, fieldofview):
+    def __init__(self, image, fieldofview = 50, minimalViewDistance=0.0):
         self.image = image
         self.fov = float(fieldofview)
+        self.mvd = float(minimalViewDistance)
+        
         self.f = self.getFocalLength()
-        self.ppd = self.getPixelProDeg(self)
+        self.ppd = self.getPixelProDeg()
         
     def getFocalLength(self): 
         return map(lambda x: ((x/2) / m.tan(m.radians(self.fov/2))), self.image.getSize())
@@ -25,52 +27,8 @@ class cam(object):
     def getPixelProDeg(self):
         return map(lambda x: x/fov, self.image.getSize())
 
-    def PixelProMM(self, minimalViewDistance):
-        if not f = 0:
-            return map(lambda x: minimalViewDistance /  x, self.f)
-        return f
-        
-    
-#pixelarray = (2048.0,1024.0)
-#fov = 64.0
-#pixprodeg = map(lambda x: x/fov, pixelarray)
-#print (pixprodeg)
- 
-minimalViewDistance = 230.0
+    def PixelProMM(self):
+        return map(lambda x: self.mvd /  x, self.f)
 
-#def calcf(pixelsize,fov):
-#    return ((pixelsize/2) / m.tan(m.radians(fov/2)))
-
-#f= map(lambda x: calcf(x,fov), pixelarray)
-#print (f)
-
-pixpromm = map(lambda x: minimalViewDistance /  x, f)
-#ppms = "Pixel Pro mm width:\t{:06.5f}\nPixel Pro mm height:\t{:06.5f}".format(pixpromm[0],pixpromm[1])
-#print (ppms)
-print (pixpromm)
-
-viewsize = map(lambda x,y: minimalViewDistance * x / y, pixelarray, f)
-print (viewsize)
-
-'''
-def main(argv):
-   inputfile = ''
-   outputfile = ''
-   try:
-      opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
-   except getopt.GetoptError:
-      print 'test.py -i <inputfile> -o <outputfile>'
-      sys.exit(2)
-   for opt, arg in opts:
-      if opt == '-h':
-         print 'test.py -i <inputfile> -o <outputfile>'
-         sys.exit()
-      elif opt in ("-i", "--ifile"):
-         inputfile = arg
-      elif opt in ("-o", "--ofile"):
-         outputfile = arg
-   print 'Input file is "', inputfile
-   print 'Output file is "', outputfile
-
-if __name__ == "__main__":
-   main(sys.argv[1:])'''
+    def getViewSize(self):
+        return map(lambda x,y: self.mvd * x / y, self.image.getSize(), self.f)
